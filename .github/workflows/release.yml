@@ -19,6 +19,7 @@ jobs:
         with:
           registry-url: 'https://npm.pkg.github.com'
           node-version: 16
+          token: ${{ secrets.PACKAGES_UPLOAD_PAT }}
       - run: npm install --no-save
       - run: npm publish
         env:
