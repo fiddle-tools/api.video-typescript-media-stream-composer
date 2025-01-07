@@ -1,4 +1,4 @@
-import { ApiVideoMediaRecorder, Options as RecorderOptions, ProgressiveUploaderOptionsWithAccessToken, ProgressiveUploaderOptionsWithUploadToken, VideoUploadResponse } from "@api.video/media-recorder";
+import { ApiVideoMediaRecorder, Options as RecorderOptions, ProgressiveUploaderOptionsWithAccessToken, ProgressiveUploaderOptionsWithUploadToken, VideoUploadResponse } from "@fiddle-tools/media-recorder";
 import { DrawingLayer, DrawingSettings } from "./drawing-layer";
 import MouseEventListener, { DragEvent, MoveEvent } from "./mouse-event-listener";
 import { Resolution } from "./stream-position";
