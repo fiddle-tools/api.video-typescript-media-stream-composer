@@ -66,9 +66,7 @@
                     resolution: {
                         width,
                         height
-                    },
-                    onlyUseTestlify: false,
-                    testlifyStorageSignedUrl: 'http://localhost:8000/upload'
+                    }
                 });
 
                 // add the screencast stream
@@ -92,10 +90,10 @@
                 // display the canvas (preview purpose)
                 mediaStreamComposer.appendCanvasTo("#canvas-container");
 
-                // when the start button is clicked, start the recording
                 startButton.onclick = () => {
                     mediaStreamComposer.startRecording({
-                        uploadToken: "YOUR_UPLOAD_TOKEN",
+                        skipUploadToAPIVideo: true,
+                        testlifyStorageSignedUrl: '<SIGNED_URL_OF_STORAGE_BUCKET>'
                     });
                     startButton.disabled = true;
                     stopButton.disabled = false;

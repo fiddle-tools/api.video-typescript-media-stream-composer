@@ -75,14 +75,10 @@ export class MediaStreamComposer {
 
     private mouseTool: MouseTool | null = "move-resize";
     private drawingLayer: DrawingLayer;
-    private testlifyStorageSignedUrl: string | undefined;
-    private onlyUseTestlify = false;
     constructor(options: Partial<Options>) {
         this.eventTarget = new EventTarget();
         this.resolution = options.resolution || { width: 1280, height: 720 };
         this.drawingLayer = new DrawingLayer();
-        this.onlyUseTestlify = options.onlyUseTestlify || false;
-        this.testlifyStorageSignedUrl = options.testlifyStorageSignedUrl || undefined;
     }
 
     private init() {
@@ -188,8 +184,7 @@ export class MediaStreamComposer {
                 },
                 ...options.origin
             },
-            testlifyStorageSignedUrl: this.onlyUseTestlify ? this.testlifyStorageSignedUrl : undefined
-        }, this.onlyUseTestlify ? undefined : this.testlifyStorageSignedUrl);
+        });
 
         const eventTypes: EventType[] = ["error", "recordingStopped", "videoPlayable"];
         eventTypes.forEach(event => {
