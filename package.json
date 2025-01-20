@@ -1,6 +1,6 @@
 {
   "name": "@fiddle-tools/media-stream-composer",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "api.video media stream composer",
   "repository": {
     "type": "git",
@@ -41,7 +41,7 @@
     "xhr-mock": "^2.5.1"
   },
   "dependencies": {
-    "@fiddle-tools/media-recorder": "^1.2.3",
+    "@fiddle-tools/media-recorder": "^1.2.4",
     "core-js": "^3.23.4",
     "@banuba/webar": "^1.5.0"
   },
