@@ -1,26 +1,65 @@
-name: Release package to github packages
+name: Release packages to GitHub Packages
+
 on:
-  release:
-    types: [published]
+  workflow_dispatch:
+
 permissions:
-  contents: read
+  contents: write
   packages: write
+  actions: write
+
 jobs:
-  deploy:
+  deploy-video-typescript-media-stream-composer:
     runs-on: ubuntu-latest
+    outputs:
+      VERSION: ${{ steps.version.outputs.VERSION }} 
     steps:
-      - uses: actions/checkout@v2
-      - name: Append to npmrc
-        run: |
-          echo -e "\n//npm.pkg.github.com/:_authToken=$PACKAGES_UPLOAD_PAT" >> .npmrc
-        env:
-          PACKAGES_UPLOAD_PAT: ${{ secrets.PACKAGES_UPLOAD_PAT }}
-      - uses: actions/setup-node@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
         with:
-          registry-url: 'https://npm.pkg.github.com'
-          node-version: 16
+          repository: fiddle-tools/api.video-typescript-media-stream-composer
           token: ${{ secrets.PACKAGES_UPLOAD_PAT }}
-      - run: npm install --no-save
-      - run: npm publish
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@fiddle-tools'
+
+      - name: Authenticate npm
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.PACKAGES_UPLOAD_PAT }}" > ~/.npmrc
+
+      - name: Install dependencies
+        run: npm install --no-save
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_UPLOAD_PAT }}
+          
+      - name: Configure Git
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "github-actions"
+      - name: Auto Increment Version
+        id: version
+        run: |
+          NEW_VERSION=$(npm version patch -m "Bump version to %s [skip ci]" | sed 's/^v//')
+          echo "VERSION=$NEW_VERSION" >> $GITHUB_ENV
+          echo "VERSION=$NEW_VERSION" >> $GITHUB_OUTPUT
+          git push origin main --follow-tags
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_UPLOAD_PAT }}
+          
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ env.VERSION }}
+          release_name: Release v${{ env.VERSION }}
+          draft: false
+          prerelease: false
+
+      - name: Publish package
+        run: npm publish --registry=https://npm.pkg.github.com --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_UPLOAD_PAT }}
