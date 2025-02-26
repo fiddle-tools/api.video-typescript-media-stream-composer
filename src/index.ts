@@ -188,6 +188,7 @@ export class MediaStreamComposer {
 
         const eventTypes: EventType[] = ["error", "recordingStopped", "videoPlayable"];
         eventTypes.forEach(event => {
+            // @ts-ignore
             this.recorder?.addEventListener(event, (e) => this.eventTarget.dispatchEvent(Object.assign(new Event(event), { data: (e as any).data })));
         });
         
